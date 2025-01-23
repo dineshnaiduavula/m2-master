@@ -21,7 +21,7 @@ function CategoryBar({
   const currentCategory = categories.find(cat => cat.main === selectedCategory);
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 bg-white shadow-md z-20 transition-transform duration-300 `} style={{ borderTop: '2px solid red' }}>
+    <div className={`fixed top-12 left-0 right-0 bg-white shadow-md z-20 transition-transform duration-300 `} style={{ borderTop: '2px solid red' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col space-y-2 py-2">
           <div className="flex space-x-4 overflow-x-auto pb-0 pt-0">

@@ -4,6 +4,9 @@ import { useAuthStore } from '../../store/authStore';
 import { Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+const searchParams = new URLSearchParams(location.search);
+const query = searchParams.toString();
+
 function AdminLogin() {
   const navigate = useNavigate();
   const { adminLogin, loading, error } = useAuthStore();
@@ -16,7 +19,7 @@ function AdminLogin() {
     e.preventDefault();
     try {
       await adminLogin(credentials.email, credentials.password);
-      navigate('/admin/menu');
+      navigate(`/admin/menu${query ? `?${query}` : ''}`);
     } catch (error) {
       toast.error('Invalid credentials');
     }

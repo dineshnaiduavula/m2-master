@@ -12,7 +12,11 @@ function Dashboard() {
   const { adminLogout } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const isActive = (path: string) => {
+  // Extract search params from the current location
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.toString();
+
+  const isActive = (path) => {
     return location.pathname.includes(path);
   };
 
@@ -56,7 +60,7 @@ function Dashboard() {
                 {navLinks.map(({ path, icon: Icon, text }) => (
                   <Link
                     key={path}
-                    to={path}
+                    to={`${path}${query ? `?${query}` : ''}`} // Append query if available
                     className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
                       isActive(path)
                         ? 'border-purple-500 text-gray-900'
@@ -96,7 +100,7 @@ function Dashboard() {
               {navLinks.map(({ path, icon: Icon, text }) => (
                 <Link
                   key={path}
-                  to={path}
+                  to={`${path}${query ? `?${query}` : ''}`} // Append query if available
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
                     isActive(path)
@@ -117,7 +121,7 @@ function Dashboard() {
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <Routes>
-          <Route path="/" element={<Navigate to="/admin/menu" replace />} />
+          <Route path="/" element={<Navigate to={`/admin/menu${query ? `?${query}` : ''}`} replace />} />
           <Route path="menu" element={<MenuManagement />} />
           <Route path="orders" element={<OrderManagement />} />
           <Route path="completed" element={<CompletedOrders />} />
