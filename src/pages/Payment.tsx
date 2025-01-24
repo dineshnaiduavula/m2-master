@@ -7,7 +7,7 @@ import { ArrowLeft, CreditCard } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -99,17 +99,19 @@ const Payment = () => {
       if (res.data && res.data.data.instrumentResponse.redirectInfo.url) {
 
 //adding s=doc in data base
-const docRef =doc(db, "/orderId/UGm0lsQRJenIc2bAhRJX");
-const docalldata = await getDoc(docRef);
-console.log(docalldata)
-const docdata=docalldata.data();
+  const docRef = collection(db, 'orderId');
+    const docalldata = await getDocs(docRef);
+    const firstDoc = docalldata.docs[0];
+    const firstDocId = firstDoc.id; // Get the ID of the first document
+    const docdata = firstDoc.data();
+    const r1=doc(db,'orderId',firstDocId)
 const currentDate = new Date().toISOString().split('T')[0];
 const docDate = docdata.date ? docdata.date.split('T')[0] : ''; // Assuming you store the date in `date` field
 let newId = 1;
 if (docDate === currentDate && docdata.id !== undefined) {
   newId = docdata.id + 1;} else {newId = 1;}
   console.log(newId)
-await updateDoc(docRef, {id: newId, date: currentDate,});
+await updateDoc(r1, {id: newId, date: currentDate,});
 
         await addDoc(collection(db, 'orders'), {
           items: cart, total: totalAmount,

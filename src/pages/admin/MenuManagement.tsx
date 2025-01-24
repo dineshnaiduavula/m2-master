@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '../../lib/firebase';
 import { Plus, Edit2, Trash2, X, Image as ImageIcon } from 'lucide-react';
@@ -67,6 +67,25 @@ function MenuModal({ isOpen, onClose, editingItem, onSubmit }: MenuModalProps) {
     setFormData({ ...formData, currentImageUrl: '', currentImageName: '', image: null });
   };
 
+  //anithaa
+  const [inputValue, setInputValue] = useState("");
+  const addData=async ()=>{
+    console.log(inputValue)
+    //add to database
+    //const docRef = doc(db, 'FOOD_CATEGORIES', 'JpE41LCjmpplMLQR0jKc');
+    const docRef = collection(db, 'FOOD_CATEGORIES');
+    const docalldata = await getDocs(docRef);
+    const firstDoc = docalldata.docs[0];
+    const firstDocId = firstDoc.id; 
+    const data = firstDoc.data();
+    const r1=doc(db,'FOOD_CATEGORIES',firstDocId)
+    const foodcategories = FOOD_CATEGORIES || [];
+    if (!foodcategories.includes(inputValue)) {
+        foodcategories.push(inputValue);
+        await updateDoc(r1, { foodcategories });
+  }
+//
+  }
   if (!isOpen) return null;
 
   return (
@@ -121,6 +140,25 @@ function MenuModal({ isOpen, onClose, editingItem, onSubmit }: MenuModalProps) {
               ))}
             </select>
           </div>
+
+{/* aani */}
+          <div>
+      <label className="block text-sm font-medium text-gray-700">Add new cat</label>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)} // Update state on input change
+        className="border rounded px-2 py-1"
+      />
+      <button
+        type="button"
+        onClick={addData}
+        className="px-2 py-1 bg-gray-500 text-white rounded-md"
+      >
+        Add
+      </button>
+    </div>
+
 
           <div>
             <label className="block text-sm font-medium text-gray-700">Subcategory (Optional)</label>
@@ -369,6 +407,7 @@ function MenuManagement() {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-600 focus:ring-purple-600"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Category</label>
             <select
@@ -382,6 +421,8 @@ function MenuManagement() {
               ))}
             </select>
           </div>
+
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Subcategory</label>
             <select

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { SCREENS } from '../../constants/categories';
-import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 
 function Manualadd() {
@@ -52,9 +52,13 @@ function Manualadd() {
   };
 
   const addtodb = async () => {
-    const docRef = doc(db, 'orderId', 'UGm0lsQRJenIc2bAhRJX');
-    const docalldata = await getDoc(docRef);
-    const docdata = docalldata.data();
+    //const docRef = doc(db, 'orderId', 'UGm0lsQRJenIc2bAhRJX');
+    const docRef = collection(db, 'orderId');
+    const docalldata = await getDocs(docRef);
+    const firstDoc = docalldata.docs[0];
+    const firstDocId = firstDoc.id; // Get the ID of the first document
+    const docdata = firstDoc.data();
+    const r1=doc(db,'orderId',firstDocId)
     const currentDate = new Date().toISOString().split('T')[0];
     const docDate = docdata?.date ? docdata.date.split('T')[0] : '';
     let newId = 1;
@@ -63,7 +67,7 @@ function Manualadd() {
       newId = docdata.id + 1;
     }
 
-    await updateDoc(docRef, { id: newId, date: currentDate });
+    await updateDoc(r1, { id: newId, date: currentDate });
 
     await addDoc(collection(db, 'orders'), {
       items: formData.items,
