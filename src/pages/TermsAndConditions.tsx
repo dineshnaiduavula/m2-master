@@ -1,12 +1,13 @@
 import { ArrowLeft } from 'lucide-react';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 
-const searchParams = new URLSearchParams(location.search);
-    const query = searchParams.toString();
+  
 
 const TermsAndConditions: React.FC = () => {
      const navigate = useNavigate();
+     const location = useLocation();
+  const query = new URLSearchParams(location.search).toString();
     useEffect(() => {
         // Scroll to the top of the page when the component is mounted
         window.scrollTo(0, 0);

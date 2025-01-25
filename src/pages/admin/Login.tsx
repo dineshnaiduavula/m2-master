@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const searchParams = new URLSearchParams(location.search);
-const query = searchParams.toString();
 
 function AdminLogin() {
   const navigate = useNavigate();
+   const location = useLocation();
+      const query = new URLSearchParams(location.search).toString();
   const { adminLogin, loading, error } = useAuthStore();
   const [credentials, setCredentials] = useState({
     email: '',

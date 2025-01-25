@@ -11,10 +11,7 @@ function Dashboard() {
   const location = useLocation();
   const { adminLogout } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Extract search params from the current location
-  const searchParams = new URLSearchParams(location.search);
-  const query = searchParams.toString();
+    const query = new URLSearchParams(location.search).toString();
 
   const isActive = (path) => {
     return location.pathname.includes(path);

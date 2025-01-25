@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { useMenuStore } from '../store/menuStore';
 import { usePaymentStore } from '../store/paymentStore';
@@ -11,9 +11,6 @@ import { collection, addDoc, doc, getDoc, updateDoc, getDocs } from 'firebase/fi
 import { db } from '../lib/firebase';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-const searchParams = new URLSearchParams(location.search);
-    const query = searchParams.toString();
-
 declare global {
   interface Window {
     phonepe: any;
@@ -24,6 +21,8 @@ const Payment = () => {
     const [loading, setLoading] = useState(false); // State for loading indicator
   
   const navigate = useNavigate();
+  const location = useLocation();
+    const query = new URLSearchParams(location.search).toString();
   const { cart, name, phone, seatNumber, clearCart, removeFromCart, screen } = useStore();
   const { items: menuItems, startRealTimeUpdates } = useMenuStore();
   const [isProcessing, setIsProcessing] = useState(false);

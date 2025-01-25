@@ -34,19 +34,19 @@
 // export default OrderConfirmation;
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
 
-const searchParams = new URLSearchParams(location.search);
-    const query = searchParams.toString();
+
 
 const OrderConfirmation = () => {
   const [status, setStatus] = useState<'SUCCESS' | 'FAILED' | 'PENDING' | null>(null);
   const navigate = useNavigate();
-
+ const location = useLocation();
+    const query = new URLSearchParams(location.search).toString();
   // useEffect(() => {
   //   const fetchPaymentStatus = async () => {
   //     const transactionId = localStorage.getItem('transactionId'); // Retrieve the transactionId from localStorage

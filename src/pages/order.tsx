@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
-const searchParams = new URLSearchParams(location.search);
-    const query = searchParams.toString();
+
 
 
 const Order: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+    const query = new URLSearchParams(location.search).toString();
 
   // Retrieve and parse sessionStorage data
   const z = localStorage.getItem('users');

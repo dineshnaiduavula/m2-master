@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import  { getFirebaseConfig }  from '../lib/firebase';
 
 export default function Options() {
   const location = useLocation();
@@ -11,8 +12,10 @@ export default function Options() {
     // const theaterParam = theater.toLowerCase(); // Assuming theater is something like 'Theatre 1'
     
     if (role === "User") {
+      getFirebaseConfig()
       navigate(`/theater?=${theater}`);
     } else if (role === "Admin") {
+      getFirebaseConfig()
       navigate(`/admin/login?=${theater}`);
     }
   };
