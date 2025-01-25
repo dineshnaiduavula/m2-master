@@ -2,7 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
+import MainPage from './pages/MainPage';
 import Menu from './pages/Menu';
+import TheaterOptions from './pages/TheaterOptions';
 import Cart from './pages/Cart';
 import TermsAndConditions from './pages/TermsAndConditions'
 import Payment from './pages/Payment';
@@ -33,11 +35,13 @@ function App() {
     <BrowserRouter>
       <Toaster position="top-center" />
       <Routes>
-      <Route path="/theater/" element={<Login />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/theater/" element={<Login />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/history" element={<Order/>} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/options" element={<TheaterOptions />} />
         <Route
           path="/menu"
           element={
