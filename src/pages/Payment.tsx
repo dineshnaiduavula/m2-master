@@ -203,7 +203,7 @@ const  user={items: cart, total: totalAmount, customerName: name, customerPhone:
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <p style={{ fontWeight: 'bold', color: 'red', textAlign: 'center' }}>
                   <span style={{ fontWeight: 'bold', color: 'black'}}> Wait until your </span>
                   order is confirmed  
@@ -212,7 +212,15 @@ const  user={items: cart, total: totalAmount, customerName: name, customerPhone:
                    Don’t reload/close this page while processing
                 </p>
                 
-              </div>
+              </div> */}
+              <p style={{ fontWeight: 'bold', color: 'red', textAlign: 'center' }}>
+  <span style={{ fontWeight: 'bold', color: 'black' }}>Wait until your </span> 
+  order is confirmed  
+  <span style={{ fontWeight: 'bold', color: 'black' }}> after </span>
+  payment
+</p>
+<div></div> {/* Moved div outside of the p tag */}
+
               <button
                 onClick={handlePayment}
                 disabled={isProcessing}

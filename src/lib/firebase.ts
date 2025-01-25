@@ -77,19 +77,32 @@ const firebaseConfigTwo = {
 // Helper function to get Firebase config
 export const getFirebaseConfig = () => {
   const searchParams = new URLSearchParams(window.location.search);
-  const theater = searchParams.get("theater");
-
+  //const theater = searchParams.get("theater");
+  const theater = searchParams.get('');
+  const theater1=searchParams.get('theater')
+  if (theater1 === "0tf1") {
+    console.log("0tf1");
+    return firebaseConfigOne;
+  }else if (theater1 === "0tf2") {
+    console.log("0tf2");
+    return firebaseConfigTwo;
+  } else if (theater1 === "0tf3") {
+    console.log("0tf3");
+    return firebaseConfigTwo;
+  }
   if (theater === "0tf1") {
     console.log("0tf1");
     return firebaseConfigOne;
-  } else if (theater === "0tf2") {
+  }else if (theater === "0tf2") {
     console.log("0tf2");
     return firebaseConfigTwo;
   } else if (theater === "0tf3") {
     console.log("0tf3");
     return firebaseConfigTwo;
-  } else {
+  }
+  else {
     console.log("more than 3333");
+    console.log(theater1)
     return firebaseConfigOne;
   }
 };
