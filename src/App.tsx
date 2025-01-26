@@ -22,7 +22,8 @@ const query = searchParams.toString();
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = useStore((state) => state.isLoggedIn);
-  return isLoggedIn ? <>{children}</> : <Navigate to="/" />;
+  // return isLoggedIn ? <>{children}</> : <Navigate to="/" />;
+  return isLoggedIn ? <>{children}</> : <Navigate to={`/admin/login${query ? `?${query}` : ''}`} />;
 };
 
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
