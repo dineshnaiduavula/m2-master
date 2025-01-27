@@ -25,5 +25,7 @@ export const FOOD_CATEGORIES =dArray as const
     'Screen 1',
     'Screen 2',
     'Screen 3',
-    'Screen 4'
+    'Screen 4',
+    'Screen 5',
+    'Screen 6'
   ] as const;

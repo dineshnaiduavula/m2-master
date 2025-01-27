@@ -80,26 +80,25 @@ export const getFirebaseConfig = () => {
   //const theater = searchParams.get("theater");
   const theater = searchParams.get('');
   const theater1=searchParams.get('theater')
-  if (theater1 === "0tf1") {
+  if (["0tf1", "1tf1", "2tf1","3tf1", "4tf1", "5tf1","6tf1"].includes(theater1)) {
     console.log("0tf1");
     return firebaseConfigOne;
-  }else if (theater1 === "0tf2") {
+  }else if (["0tf2", "1tf2", "2tf2","3tf2", "4tf2", "5tf2","6tf2"].includes(theater1)) {
     console.log("0tf2");
     return firebaseConfigTwo;
-  } else if (theater1 === "0tf3") {
+  } else if (["0tf3", "1tf3", "2tf3","3tf3", "4tf3", "5tf3","6tf3"].includes(theater1)) {
     console.log("0tf3");
     return firebaseConfigTwo;
   }
-  if (theater === "0tf1") {
+  if (["0tf1", "1tf1", "2tf1","3tf1", "4tf1", "5tf1","6tf1"].includes(theater)) {
     console.log("0tf1");
     return firebaseConfigOne;
-  }else if (theater === "0tf2") {
+  }else if (["0tf2", "1tf2", "2tf2","3tf2", "4tf2", "5tf2","6tf2"].includes(theater1)) {
     console.log("0tf2");
     return firebaseConfigTwo;
-  } else if (theater === "0tf3") {
+  } else if (["0tf3", "1tf3", "2tf3","3tf3", "4tf3", "5tf3","6tf3"].includes(theater1)) {
     console.log("0tf3");
-    return firebaseConfigTwo;
-  }
+    return firebaseConfigTwo;}
   else {
     console.log("more than 3333");
     console.log(theater1)

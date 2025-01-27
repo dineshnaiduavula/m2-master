@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import toast from 'react-hot-toast';
-import { SCREENS } from '../constants/categories';
 import logo from '../public/WhatsApp Image 2024-12-01 at 11.17.39 AM.jpeg';
 
 function Login() {
   const navigate = useNavigate();
   const setUser = useStore((state) => state.setUser);
+  const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const theater = queryParams.get("theater");
+    const firstNumber = theater.match(/\d/)[0];
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     seatNumber: '',
-    screen: String()
+    screen: firstNumber
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -20,7 +23,7 @@ function Login() {
   
     const isPhoneNumberValid = /^\d{10}$/.test(formData.phone);
   
-    if (!formData.name || !formData.phone || !formData.seatNumber || !formData.screen) {
+    if (!formData.name || !formData.phone || !formData.seatNumber) {
       toast.error('Please fill in all fields');
       return;
     }
@@ -30,7 +33,8 @@ function Login() {
       return;
     }
   
-    setUser(formData.name, formData.phone, formData.seatNumber, formData.screen);
+    setUser(formData.name, formData.phone, formData.seatNumber, firstNumber);
+    console.log(formData.name, formData.phone, formData.seatNumber, firstNumber)
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.toString();
     navigate(`/menu${query ? `?${query}` : ''}`);
@@ -71,40 +75,6 @@ function Login() {
               placeholder="Enter your phone number"
             />
           </div>
-
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700">Screen</label>
-            <select
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#fe0002] focus:border-[#fe0002]"
-              value={formData.screen}
-              onChange={(e) => setFormData({ ...formData, screen: e.target.value })}
-            >
-              {SCREENS.map((screen) => (
-                <option key={screen} value={screen}>{screen}</option>
-              ))}
-            </select>
-          </div> */}
-          <div>
-  <label className="block text-sm font-medium text-gray-700">Screen</label>
-  <div className="mt-1">
-    {SCREENS.map((screen) => (
-      <div key={screen} className="flex items-center">
-        <input
-          type="radio"
-          id={screen}
-          name="screen"
-          value={screen}
-          checked={formData.screen === screen}
-          onChange={(e) => setFormData({ ...formData, screen: e.target.value })}
-          className="h-4 w-4 text-[#fe0002] border-gray-300 focus:ring-[#fe0002]"
-        />
-        <label htmlFor={screen} className="ml-2 block text-sm text-gray-700">
-          {screen}
-        </label>
-      </div>
-    ))}
-  </div>
-</div>
           
           <div>
             <label className="block text-sm font-medium text-gray-700">Seat Number</label>
