@@ -14,21 +14,24 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAdmin: false,
   loading: false,
   error: null,
-
   adminLogin: async (email: string, password: string) => {
+    const query = new URLSearchParams(location.search).toString();
     set({ loading: true, error: null });
     try {
       await signInWithEmailAndPassword(auth, email, password);
       set({ isAdmin: true, loading: false });
     } catch (error) {
       set({ error: 'Invalid credentials', loading: false });
+      navigate(`/admin/menu${query ? `?${query}` : ''}`);
     }
   },
 
-  adminLogout: async () => {
+  adminLogout: async () => { // Correctly placed inside the component
+    const query = new URLSearchParams(location.search).toString();
     try {
       await signOut(auth);
       set({ isAdmin: false });
+      navigate(`/theater${query ? `?${query}` : ''}`);
     } catch (error) {
       set({ error: 'Failed to logout' });
     }

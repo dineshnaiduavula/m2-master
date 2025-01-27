@@ -67,7 +67,12 @@ function CompletedOrders() {
 
       // Calculate total money collected
       const total = sortedOrders.reduce((sum, order) => sum + order.total, 0);
-      setTotalCollected(total);
+      const total1 = sortedOrders.reduce((sum, order) => {
+        const subtotal = order.items.reduce((itemSum: number, item: any) => itemSum + item.price * item.quantity, 0);
+        return sum + subtotal;
+      }, 0);
+  
+      setTotalCollected(total1);
     } catch (error) {
       toast.error('Failed to fetch completed orders');
       console.error(error);

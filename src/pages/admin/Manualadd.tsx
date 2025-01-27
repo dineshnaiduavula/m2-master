@@ -194,12 +194,16 @@ function Manualadd() {
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700">Price</label>
               <input
-                type="number"
-                value={currentItem.price}
-                onChange={(e) => setCurrentItem({ ...currentItem, price: Number(e.target.value) })}
-                placeholder="Price"
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-              />
+  type="number"
+  value={currentItem.price}
+  onChange={(e) => {
+    const newValue = e.target.value.replace(/^0+/, '') || '0'; // Remove leading zeros
+    setCurrentItem({ ...currentItem, price: newValue });
+  }}
+  placeholder="Price"
+  className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+/>
+
             </div>
             <div className="flex-shrink-0">
               <button
@@ -214,17 +218,17 @@ function Manualadd() {
           <ul>
             {formData.items.map((item, index) => (
               <li key={index} className="flex justify-between items-center">
-                <span>
-                  {item.name} - {item.quantity} - {item.price}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveItem(index)}
-                  className="px-2 py-1 bg-gray-500 text-white rounded-md"
-                >
-                  Remove
-                </button>
-              </li>
+              <span className="text-lg font-medium">
+                <span className="font-bold">{item.name}</span> x {item.quantity} <span className="font-bold">₹ {item.price}</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => handleRemoveItem(index)}
+                className="px-2 py-1 bg-gray-500 text-white rounded-md"
+              >
+                Remove
+              </button>
+            </li>            
             ))}
           </ul>
         </div>
