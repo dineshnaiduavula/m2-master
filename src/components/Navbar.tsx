@@ -103,6 +103,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingCart, LogOut, Clock } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ThreaterName from "../constants/categories";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -156,7 +157,7 @@ function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <h1 className="text-xl text-[#fe0002]" style={{ fontWeight: 'bolder' }}>
-              Raj Yuvraj
+              {ThreaterName}
             </h1>
             <img
               className="w-10 h-auto mx-auto object-cover mb-4"

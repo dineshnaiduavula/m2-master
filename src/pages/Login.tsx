@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import toast from 'react-hot-toast';
 import logo from '../public/WhatsApp Image 2024-12-01 at 11.17.39 AM.jpeg';
+import ThreaterName from "../constants/categories";
 
 function Login() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ function Login() {
             alt="Raj Yuvraj Logo"
             className="w-34 h-24 mx-auto  object-cover mb-4"
           />
-          <h2 className="mt-4 text-3xl font-bold text-gray-900">Raj Yuvraj</h2>
+          <h2 className="mt-4 text-3xl font-bold text-gray-900">{ThreaterName}</h2>
           <p className="mt-2 text-gray-600">Sign in to order your snacks</p>
         </div>
         
