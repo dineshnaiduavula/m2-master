@@ -5,6 +5,7 @@ import { Printer, CheckCircle, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { playNotificationSound } from '../../utils/sound';
 import { calculateTaxes } from '../../utils/calculateTaxes';
+import ThreaterName  from '../../constants/categories';
 
 interface Order {
   id: string;
@@ -66,7 +67,7 @@ function OrderManagement() {
     const printContent = `
       ---------------------------------
                 Customer Copy
-                G3 CINEMA
+                    ${ThreaterName}
       ---------------------------------
       Completed At: ${new Date(order.createdAt).toLocaleString()}
       GSTN :37AAKFV0150G1Z9
@@ -98,7 +99,7 @@ ${order.items
       ---------------------------------
       Total Amount         : ₹${order.total.toFixed(2)}
       ---------------------------------
-      Thank You for Choosing G3 Cinema!
+      Thank You for Choosing ${ThreaterName}!
 `;
 
 

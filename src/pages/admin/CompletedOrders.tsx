@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { exportOrders } from '../../utils/exportOrders';
 import { format } from 'date-fns';
 import { calculateTaxes } from '../../utils/calculateTaxes';
+import ThreaterName  from '../../constants/categories';
 
 interface Order {
   id: string;
@@ -86,7 +87,7 @@ function CompletedOrders() {
     const printContent = `
       ---------------------------------
                 Customer Copy
-                G3 CINEMA
+                  ${ThreaterName}
       ---------------------------------
       Completed At: ${new Date(order.completedAt).toLocaleString()}
       GSTN :37AAKFV0150G1Z9
@@ -118,7 +119,7 @@ ${order.items
       ---------------------------------
       Total Amount   : ₹${order.total.toFixed(2)}
       ---------------------------------
-      Thank You for Choosing G3 Cinema!
+      Thank You for Choosing ${ThreaterName}!
 `;
 
     const printWindow = window.open('', '_blank');
