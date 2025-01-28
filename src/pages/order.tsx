@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-
+import { Gstt } from '../constants/categories';
 
 
 
@@ -47,7 +47,7 @@ const Order: React.FC = () => {
                   0
                 );
                 // Calculate handling charges (4% of subtotal)
-                const handlingCharges = subtotal * 0.04;
+                const handlingCharges = subtotal * Gstt;
 
                 return (
                   <div key={index} className="bg-white rounded-lg shadow-md p-6">
@@ -107,7 +107,7 @@ const Order: React.FC = () => {
                       {/* Handling Charges */}
                       <div>
                         <div className="flex justify-between text-sm font-medium pt-2">
-                          <span>Handling Charges (4%):</span>
+                          <span>Handling Charges ({Gstt*100}%):</span>
                           <span>₹{handlingCharges.toFixed(2)}</span>
                         </div>
                       </div>

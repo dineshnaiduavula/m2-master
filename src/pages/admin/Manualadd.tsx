@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { SCREENS } from '../../constants/categories';
 import { collection, addDoc, doc, getDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { Gstt } from '../../constants/categories';
 
 function Manualadd() {
   const initialFormData = {
@@ -23,9 +24,10 @@ function Manualadd() {
   const [currentItem, setCurrentItem] = useState(initialItem);
   const calculateTotal = () => {
     const subtotal = formData.items.reduce((total, item) => total + item.quantity * item.price, 0);
-    const totalWithSurcharge = subtotal * 1.04; // Add 4% surcharge
+    const totalWithSurcharge = subtotal * (1+ Gstt); // Add 4% surcharge
     return parseFloat(totalWithSurcharge.toFixed(2)); // Convert to a float with 2 decimal places
   };
+  
   
 
   const handleAddItem = () => {
@@ -235,7 +237,7 @@ function Manualadd() {
 
         {/* Display Total */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Total Payment (4% Surcharge)</label>
+          <label className="block text-sm font-medium text-gray-700">Total Payment ({Gstt*100}% Surcharge)</label>
           <p className="mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
             {calculateTotal()}
           </p>

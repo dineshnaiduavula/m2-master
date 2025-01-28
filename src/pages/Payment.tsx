@@ -10,6 +10,7 @@ import CryptoJS from 'crypto-js';
 import { collection, addDoc, doc, getDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { Gstt } from '../constants/categories';
 
 declare global {
   interface Window {
@@ -35,7 +36,7 @@ const Payment = () => {
 
   const calculateTotal = () => {
     const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-    const handlingCharges = subtotal * 0.04;
+    const handlingCharges = subtotal * Gstt;
     return subtotal + handlingCharges;
   };
 
@@ -183,7 +184,7 @@ const  user={items: cart, total: totalAmount, customerName: name, customerPhone:
                   </div>
                   <br></br>
                   <div className="flex justify-between text-sm">
-                    <span>Handling Charges (4%)</span>
+                    <span>Handling Charges ({Gstt*100}%)</span>
                     <span>₹{(calculateTotal() - cart.reduce((t, i) => t + i.price * i.quantity, 0)).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-semibold text-lg mt-4">

@@ -8,6 +8,7 @@ import { exportOrders } from '../../utils/exportOrders';
 import { format } from 'date-fns';
 import { calculateTaxes } from '../../utils/calculateTaxes';
 import ThreaterName  from '../../constants/categories';
+import { Gstt } from '../../constants/categories';
 
 interface Order {
   id: string;
@@ -82,7 +83,7 @@ function CompletedOrders() {
 
   const handlePrint = (order: Order) => {
     const subtotal = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const { sgst, cgst, handlingCharges } = calculateTaxes(subtotal);
+    const {  handlingCharges } = calculateTaxes(subtotal);
 
     const printContent = `
       ---------------------------------
@@ -115,7 +116,7 @@ ${order.items
       ---------------------------------
       Sub Total            :₹ ${subtotal.toFixed(2)}
       ---------------------------------
-      Handling Charges(4%) : ₹${handlingCharges.toFixed(2)}
+      Handling Charges(${Gstt*100}%) : ₹${handlingCharges.toFixed(2)}
       ---------------------------------
       Total Amount   : ₹${order.total.toFixed(2)}
       ---------------------------------
@@ -198,7 +199,7 @@ ${order.items
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {orders.map((order) => {
           const subtotal = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-          const { sgst, cgst, handlingCharges } = calculateTaxes(subtotal);
+          const { handlingCharges } = calculateTaxes(subtotal);
 
           return (
             <div key={order.id} className="bg-white rounded-lg shadow-md p-6">
@@ -256,7 +257,7 @@ ${order.items
                     <span>₹{cgst.toFixed(2)}</span>
                   </div> */}
                   <div className="flex justify-between text-sm">
-                    <span>Handling Charges (4%)</span>
+                    <span>Handling Charges ({Gstt*100}%)</span>
                     <span>₹{handlingCharges.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-medium pt-2 border-t">

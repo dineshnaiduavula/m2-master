@@ -226,6 +226,7 @@ import { useStore } from '../store/useStore';
 import { useMenuStore } from '../store/menuStore';
 import { Minus, Plus, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Gstt } from '../constants/categories';
 
 function Cart() {
   const navigate = useNavigate();
@@ -276,16 +277,17 @@ function Cart() {
   };
 
   const calculateTaxes = (subtotal) => {
-    const sgst = subtotal * 0.025; // 2.5%
-    const cgst = subtotal * 0.025; // 2.5%
-    const handleCharges = subtotal * 0.04; // 4%
-    return { sgst, cgst, handleCharges };
+   // const sgst = subtotal * 0.025; // 2.5%
+    //const cgst = subtotal * 0.025; // 2.5%
+    const handleCharges = subtotal * Gstt; // 4%
+    //return { sgst, cgst, handleCharges };
+    return {handleCharges}
   };
 
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-    const { sgst, cgst, handleCharges } = calculateTaxes(subtotal);
-    return subtotal + sgst + cgst + handleCharges;
+    const {  handleCharges } = calculateTaxes(subtotal);
+    return subtotal + handleCharges;
   };
 
   const availableItemsCount = cart.filter(item => 
@@ -391,7 +393,7 @@ function Cart() {
                   <span>₹{calculateSubtotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Handling Charges (4%)</span>
+                  <span>Handling Charges ({Gstt*100}%)</span>
                   <span>₹{calculateTaxes(calculateSubtotal()).handleCharges.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-3 mt-3">
