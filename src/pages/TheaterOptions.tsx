@@ -9,19 +9,17 @@ export default function Options() {
   const navigate = useNavigate(); // To navigate to different routes
 
   const handleScreenNavigation = (screenNumber) => {
-    getFirebaseConfig(); // Assuming some config initialization is needed
-
-    // Modify the `theater` value
+    getFirebaseConfig(); 
     const updatedTheater = `${screenNumber}${theater.slice(1)}`;
-
-    // Navigate to the new URL
     navigate(`/theater?theater=${updatedTheater}`);
+    window.location.reload();
   };
 
   const handleLogin = (role) => {
     if (role === "Admin") {
       getFirebaseConfig();
       navigate(`/admin/login?=${theater}`);
+      window.location.reload();
     }
   };
 
