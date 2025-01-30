@@ -31,7 +31,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       await signOut(auth);
       set({ isAdmin: false });
-      navigate(`/theater${query ? `?${query}` : ''}`);
+      //if any error in logut uncomment
+      //navigate(`/theater${query ? `?${query}` : ''}`);
     } catch (error) {
       set({ error: 'Failed to logout' });
     }

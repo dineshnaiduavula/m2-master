@@ -23,6 +23,12 @@ export default function Options() {
     }
   };
 
+  const EditAndExport = () => {
+      getFirebaseConfig();
+      navigate(`/edit-export?theater=${theater}`);
+      window.location.reload();
+    }
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-50">
       <h1 className="text-3xl font-bold mb-6">Welcome to {theater} Options</h1>
@@ -45,6 +51,13 @@ export default function Options() {
         className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
       >
         Admin Login
+      </button>
+
+      <button
+        onClick={() => EditAndExport()}
+        className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+      >
+        edit and export
       </button>
     </div>
   );
