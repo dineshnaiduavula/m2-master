@@ -1,54 +1,104 @@
 import React, { useState, useEffect } from "react";
-import { getFirebaseConfig } from "../lib/firebase";
-import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { exportOrders } from "../utils/exportOrders";
+import { format } from "date-fns";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const EditAndExport = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [docId, setDocId] = useState(""); // Store document ID
+  const [docId, setDocId] = useState("");
 
-  // Form fields
   const [ThreaterName, setTheaterName] = useState("");
   const [TermsAndConditionss, setTerms] = useState("");
   const [PrivacyAndPolicy, setPolicy] = useState("");
   const [Gstt, setGstNumber] = useState("");
   const [Notes, setNotes] = useState("");
 
-  // Fetch data from Firestore after login
+  const [orders, setOrders] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [totalAmount, setTotalAmount] = useState(0); // State to hold the total amount
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isLoggedIn) {
-      const fetchData = async () => {
-        try {
-          const collectionRef = collection(db, "MainData");
-          const querySnapshot = await getDocs(collectionRef);
-
-          if (!querySnapshot.empty) {
-            const firstDoc = querySnapshot.docs[0]; // Get first document
-            const data = firstDoc.data();
-
-            setTheaterName(data.ThreaterName || "");
-            setTerms(data.TermsAndConditionss || "");
-            setPolicy(data.PrivacyAndPolicy || "");
-            setGstNumber(data.Gstt || "");
-            setNotes(data.Notes || "");
-            setDocId(firstDoc.id); // Store document ID for updating
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
       fetchData();
     }
-  }, [isLoggedIn]); // Runs when `isLoggedIn` changes
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchCompletedOrders();
+    }
+  }, [startDate, endDate, isLoggedIn]);
+
+  const fetchData = async () => {
+    try {
+      const collectionRef = collection(db, "MainData");
+      const querySnapshot = await getDocs(collectionRef);
+
+      if (!querySnapshot.empty) {
+        const firstDoc = querySnapshot.docs[0];
+        const data = firstDoc.data();
+        setTheaterName(data.ThreaterName || "");
+        setTerms(data.TermsAndConditionss || "");
+        setPolicy(data.PrivacyAndPolicy || "");
+        setGstNumber(data.Gstt || "");
+        setNotes(data.Notes || "");
+        setDocId(firstDoc.id);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchCompletedOrders = async () => {
+    try {
+      const startOfRange = new Date(startDate);
+      startOfRange.setHours(0, 0, 0, 0);
+
+      const endOfRange = new Date(endDate);
+      endOfRange.setHours(23, 59, 59, 999);
+
+      const q = query(
+        collection(db, "orders"),
+        where("status", "==", "completed"),
+        where("createdAt", ">=", startOfRange.toISOString()),
+        where("createdAt", "<=", endOfRange.toISOString())
+      );
+      const querySnapshot = await getDocs(q);
+      const fetchedOrders = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setOrders(fetchedOrders);
+
+      // Calculate total amount collected from the fetched orders
+      const total = fetchedOrders.reduce((acc, order) => acc + order.total, 0);
+      setTotalAmount(total); // Set total amount
+    } catch (error) {
+      toast.error("Failed to fetch completed orders");
+    }
+  };
+
+  const handleExport = () => {
+    if (orders.length === 0) {
+      toast.error("No orders to export");
+      return;
+    }
+    try {
+      exportOrders(orders, startDate, endDate);
+      toast.success("Orders exported successfully");
+    } catch (error) {
+      toast.error("Failed to export orders");
+    }
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    getFirebaseConfig();
-
     if (username === "navya@gmail.com" && password === "123456") {
       setIsLoggedIn(true);
     } else {
@@ -56,130 +106,127 @@ const EditAndExport = () => {
     }
   };
 
-  const handleSave = async () => {
-    try {
-      if (!docId) {
-        alert("Error: No document found to update!");
-        return;
-      }
+  const handleUpdate = async () => {
+    const confirmUpdate = window.confirm("Are you sure you want to update the data?");
+    if (!confirmUpdate) return;
 
-      const docRef = doc(db, "MainData", docId);
-      await setDoc(docRef, {
+    if (!docId) {
+      toast.error("No document found to update.");
+      return;
+    }
+    try {
+      await setDoc(doc(db, "MainData", docId), {
         ThreaterName,
         TermsAndConditionss,
         PrivacyAndPolicy,
-        Gstt: Number(Gstt), 
+        Gstt,
         Notes,
       });
-
-      alert("Data saved successfully!");
+      toast.success("Updated successfully!");
     } catch (error) {
-      console.error("Error saving data:", error);
-      alert("Failed to save data.");
+      console.error("Error updating document:", error);
+      toast.error("Failed to update.");
     }
   };
 
-  const handleBack = () => {
-    setIsLoggedIn(false); // Log out
-  };
-
   return (
-    <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg w-96">
+    <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg w-full">
       {!isLoggedIn ? (
         <>
           <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
           {error && <p className="text-red-500 mb-2">{error}</p>}
           <form onSubmit={handleLogin} className="w-full">
-            <div className="mb-4">
-              <label className="block text-gray-700">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
-            >
-              Login
-            </button>
+            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 border rounded-lg" required />
+            <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">Login</button>
           </form>
         </>
       ) : (
-        <>
-          <h2 className="text-2xl font-bold mb-4">Theater Details</h2>
-          <div className="mb-4 w-full">
-            <label className="block text-gray-700">Name of the Theatre</label>
-            <input
-              type="text"
-              value={ThreaterName}
-              onChange={(e) => setTheaterName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-4 w-full">
-            <label className="block text-gray-700">GST Number</label>
-            <input
-                type="number"
-                 value={Gstt}
-             onChange={(e) => setGstNumber(Number(e.target.value))} // Convert to number
-            className="w-full px-4 py-2 border rounded-lg"
-                />
+        <div className="flex w-full gap-8">
+          {/* Theater Details */}
+          <div className="w-1/2 space-y-4">
+            <h2 className="text-2xl font-bold mb-6">Theater Details</h2>
+            <div>
+              <label className="block text-sm font-medium">Theater Name:</label>
+              <input
+                type="text"
+                placeholder="Theater Name"
+                value={ThreaterName}
+                onChange={(e) => setTheaterName(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+            </div>
 
+            <div>
+              <label className="block text-sm font-medium">GST Number:</label>
+              <input
+                type="number"
+                placeholder="GST Number"
+                value={Gstt}
+                onChange={(e) => setGstNumber(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Terms & Conditions:</label>
+              <textarea
+                placeholder="Terms & Conditions"
+                value={TermsAndConditionss}
+                onChange={(e) => setTerms(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Privacy & Policy:</label>
+              <textarea
+                placeholder="Privacy Policy"
+                value={PrivacyAndPolicy}
+                onChange={(e) => setPolicy(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Notes:</label>
+              <textarea
+                placeholder="Notes"
+                value={Notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+              />
+            </div>
+
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={handleUpdate}
+                className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 w-full sm:w-auto"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => navigate(-1)}
+                className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 w-full sm:w-auto"
+              >
+                Back
+              </button>
+            </div>
           </div>
-          <div className="mb-4 w-full">
-            <label className="block text-gray-700">Terms & Conditions</label>
-            <textarea
-              value={TermsAndConditionss}
-              onChange={(e) => setTerms(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
+
+          {/* Export Completed Orders */}
+          <div className="w-1/2 space-y-4">
+            <h2 className="text-2xl font-bold mt-6">Export Completed Orders</h2>
+            <input type="date" value={format(startDate, 'yyyy-MM-dd')} onChange={(e) => setStartDate(new Date(e.target.value))} className="border rounded px-2 py-1" />
+            <input type="date" value={format(endDate, 'yyyy-MM-dd')} onChange={(e) => setEndDate(new Date(e.target.value))} className="border rounded px-2 py-1" />
+            
+            <div className="mt-4">
+              <p className="text-sm font-medium">Total Amount Collected: ₹{totalAmount}</p>
+            </div>
+
+            <button onClick={handleExport} className="bg-blue-500 text-white px-4 py-2 rounded">Export Orders</button>
           </div>
-          <div className="mb-4 w-full">
-            <label className="block text-gray-700">Policy & Privacy</label>
-            <textarea
-              value={PrivacyAndPolicy}
-              onChange={(e) => setPolicy(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-          </div>
-          
-          <div className="mb-4 w-full">
-            <label className="block text-gray-700">Notes</label>
-            <textarea
-              value={Notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="flex gap-4 w-full">
-            <button
-              onClick={handleSave}
-              className="w-1/2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-700 transition"
-            >
-              Update
-            </button>
-            <button
-              onClick={handleBack}
-              className="w-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
-            >
-              Back
-            </button>
-          </div>
-        </>
+        </div>
       )}
     </div>
   );
