@@ -106,20 +106,51 @@ const EditAndExport = () => {
     }
   };
 
+  // const handleUpdate = async () => {
+  //   const confirmUpdate = window.confirm("Are you sure you want to update the data?");
+  //   if (!confirmUpdate) return;
+
+  //   if (!docId) {
+  //     toast.error("No document found to update.");
+  //     return;
+  //   }
+  //   try {
+  //     await setDoc(doc(db, "MainData", docId), {
+  //       ThreaterName,
+  //       TermsAndConditionss,
+  //       PrivacyAndPolicy,
+  //       Gstt,
+  //       Notes,
+  //     });
+  //     toast.success("Updated successfully!");
+  //   } catch (error) {
+  //     console.error("Error updating document:", error);
+  //     toast.error("Failed to update.");
+  //   }
+  // };
+
   const handleUpdate = async () => {
     const confirmUpdate = window.confirm("Are you sure you want to update the data?");
     if (!confirmUpdate) return;
-
+  
     if (!docId) {
       toast.error("No document found to update.");
       return;
     }
+    
+    const gstNumber = parseFloat(Gstt); // Ensure Gstt is stored as a number
+    
+    if (isNaN(gstNumber)) {
+      toast.error("Invalid GST number. Please enter a valid number.");
+      return;
+    }
+    
     try {
       await setDoc(doc(db, "MainData", docId), {
         ThreaterName,
         TermsAndConditionss,
         PrivacyAndPolicy,
-        Gstt,
+        Gstt: gstNumber, // Store GST as a number
         Notes,
       });
       toast.success("Updated successfully!");
@@ -160,12 +191,13 @@ const EditAndExport = () => {
             <div>
               <label className="block text-sm font-medium">GST Number:</label>
               <input
-                type="number"
-                placeholder="GST Number"
-                value={Gstt}
-                onChange={(e) => setGstNumber(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg"
-              />
+  type="number" // Ensure input type is number
+  placeholder="GST Number"
+  value={Gstt}
+  onChange={(e) => setGstNumber(e.target.value.replace(/[^0-9.]/g, ""))} // Remove non-numeric values
+  className="w-full px-4 py-2 border rounded-lg"
+/>
+
             </div>
 
             <div>
