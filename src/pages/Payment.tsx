@@ -61,11 +61,8 @@ const Payment = () => {
       merchantTransactionId: data.transactionId,
       merchantUserId: data.MUID,
       name: data.name,
-      amount: totalAmount * 100, // Amount in paise,
-      //navigate(`/menu${query ? `?${query}` : ''}`)
+      amount: totalAmount * 100, 
      redirectUrl: `${window.location.origin}/order-confirmation${query ? `?${query}` : ''}`,
-     //(`/menu${query ? `?${query}` : ''}``),
-    //  redirectUrl:'http://localhost:5173/order-confirmation',
       redirectMode: 'POST',
       mobileNumber: data.number,
       paymentInstrument: {
@@ -110,7 +107,6 @@ const docDate = docdata.date ? docdata.date.split('T')[0] : ''; // Assuming you 
 let newId = 1;
 if (docDate === currentDate && docdata.id !== undefined) {
   newId = docdata.id + 1;} else {newId = 1;}
-  console.log(newId)
 await updateDoc(r1, {id: newId, date: currentDate,});
 
         await addDoc(collection(db, 'orders'), {
@@ -203,17 +199,6 @@ const  user={items: cart, total: totalAmount, customerName: name, customerPhone:
                   <p><span className="font-medium">Screen:</span> {screen}</p>
                 </div>
               </div>
-
-              {/* <div>
-                <p style={{ fontWeight: 'bold', color: 'red', textAlign: 'center' }}>
-                  <span style={{ fontWeight: 'bold', color: 'black'}}> Wait until your </span>
-                  order is confirmed  
-                  <span style={{ fontWeight: 'bold', color: 'black'}}> after </span>
-                  payment<div></div>
-                   Don’t reload/close this page while processing
-                </p>
-                
-              </div> */}
               <p style={{ fontWeight: 'bold', color: 'red', textAlign: 'center' }}>
   <span style={{ fontWeight: 'bold', color: 'black' }}>Wait until your </span> 
   order is confirmed  

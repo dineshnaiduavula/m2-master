@@ -15,7 +15,6 @@ const Order: React.FC = () => {
   const orders = z ? JSON.parse(z) : [];
 
   useEffect(() => {
-    console.log('Orders:', orders);
   }, [orders]);
 
   return (

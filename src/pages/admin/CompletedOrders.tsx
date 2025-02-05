@@ -77,7 +77,6 @@ function CompletedOrders() {
       setTotalCollected(total1);
     } catch (error) {
       toast.error('Failed to fetch completed orders');
-      console.error(error);
     }
   };
 
@@ -248,14 +247,6 @@ ${order.items
                     <span>Subtotal</span>
                     <span>₹{subtotal.toFixed(2)}</span>
                   </div>
-                  {/* <div className="flex justify-between text-sm">
-                    <span>SGST (2.5%)</span>
-                    <span>₹{sgst.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>CGST (2.5%)</span>
-                    <span>₹{cgst.toFixed(2)}</span>
-                  </div> */}
                   <div className="flex justify-between text-sm">
                     <span>Handling Charges ({Gstt*100}%)</span>
                     <span>₹{handlingCharges.toFixed(2)}</span>

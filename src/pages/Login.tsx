@@ -35,7 +35,6 @@ function Login() {
     }
   
     setUser(formData.name, formData.phone, formData.seatNumber, firstNumber);
-    console.log(formData.name, formData.phone, formData.seatNumber, firstNumber)
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.toString();
     navigate(`/menu${query ? `?${query}` : ''}`);

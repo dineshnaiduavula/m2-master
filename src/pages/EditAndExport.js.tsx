@@ -22,7 +22,7 @@ const EditAndExport = () => {
   const [orders, setOrders] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [totalAmount, setTotalAmount] = useState(0); // State to hold the total amount
+  const [totalAmount, setTotalAmount] = useState(0); 
 
   const navigate = useNavigate();
 
@@ -75,8 +75,6 @@ const EditAndExport = () => {
       const querySnapshot = await getDocs(q);
       const fetchedOrders = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setOrders(fetchedOrders);
-
-      // Calculate total amount collected from the fetched orders
       const total = fetchedOrders.reduce((acc, order) => acc + order.total, 0);
       setTotalAmount(total); // Set total amount
     } catch (error) {
@@ -106,29 +104,6 @@ const EditAndExport = () => {
     }
   };
 
-  // const handleUpdate = async () => {
-  //   const confirmUpdate = window.confirm("Are you sure you want to update the data?");
-  //   if (!confirmUpdate) return;
-
-  //   if (!docId) {
-  //     toast.error("No document found to update.");
-  //     return;
-  //   }
-  //   try {
-  //     await setDoc(doc(db, "MainData", docId), {
-  //       ThreaterName,
-  //       TermsAndConditionss,
-  //       PrivacyAndPolicy,
-  //       Gstt,
-  //       Notes,
-  //     });
-  //     toast.success("Updated successfully!");
-  //   } catch (error) {
-  //     console.error("Error updating document:", error);
-  //     toast.error("Failed to update.");
-  //   }
-  // };
-
   const handleUpdate = async () => {
     const confirmUpdate = window.confirm("Are you sure you want to update the data?");
     if (!confirmUpdate) return;
@@ -138,7 +113,7 @@ const EditAndExport = () => {
       return;
     }
     
-    const gstNumber = parseFloat(Gstt); // Ensure Gstt is stored as a number
+    const gstNumber = parseFloat(Gstt); 
     
     if (isNaN(gstNumber)) {
       toast.error("Invalid GST number. Please enter a valid number.");

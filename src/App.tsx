@@ -15,7 +15,6 @@ import AdminLogin from './pages/admin/Login';
 import AdminDashboard from './pages/admin/Dashboard';
 import { useStore } from './store/useStore';
 import { useAuthStore } from './store/authStore';
-import PaymentSuccess from './pages/PaymentSuccess';
 import EditAndExport from './pages/EditAndExport.js';
 
 const searchParams = new URLSearchParams(location.search);
@@ -40,7 +39,6 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/theater/" element={<Login />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/history" element={<Order/>} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/admin/login" element={<AdminLogin />} />

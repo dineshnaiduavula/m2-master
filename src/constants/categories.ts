@@ -1,24 +1,16 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-const collectionRef = collection(db, 'FOOD_CATEGORIES'); // Reference to the collection
-const querySnapshot = await getDocs(collectionRef); // Get all documents in the collection
-  const firstDoc = querySnapshot.docs[0]; // Get the first document
-  const firstDocData = firstDoc.data(); // Get the data of the first document
+const collectionRef = collection(db, 'FOOD_CATEGORIES');
+const querySnapshot = await getDocs(collectionRef); 
+  const firstDoc = querySnapshot.docs[0];
+  const firstDocData = firstDoc.data(); 
   const dArray = firstDocData.foodcategories;
-//maindata
-const collectionRefMainData = collection(db, 'MainData'); // Reference to the collection
-const querySnapshotMainData = await getDocs(collectionRefMainData); // Get all documents in the collection
-  const firstDocMainData = querySnapshotMainData.docs[0]; // Get the first document
-  const firstDocDataMainData = firstDocMainData.data(); // Get the data of the first document
+const collectionRefMainData = collection(db, 'MainData'); 
+const querySnapshotMainData = await getDocs(collectionRefMainData); 
+  const firstDocMainData = querySnapshotMainData.docs[0]; 
+  const firstDocDataMainData = firstDocMainData.data(); 
 
 export const FOOD_CATEGORIES =dArray as const
-// ['Snacks',
-//     'Beverages',
-//     'Popcorn',
-//     'Ice Cream',
-//     'Fast Food'
-//   ] as const;
-  
   export const SCREENS = [
     'Screen 1',
     'Screen 2',

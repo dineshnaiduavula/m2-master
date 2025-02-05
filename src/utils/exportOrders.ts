@@ -23,12 +23,10 @@ export const exportOrders = (orders: any[], startDate: Date, endDate: Date) => {
 
   // Calculate totals
   const totalTheatreAmount = worksheetData.reduce((sum, order) => sum + order['Theatre amount'], 0);
-  //const totalAmount = worksheetData.reduce((sum, order) => sum + order['Total Amount'], 0);
-  const totalAmount=orders.reduce((sum, order) => sum + order.total, 0);
-  // Add blank row for spacing
-  worksheetData.push({}); // Blank row for separation
 
-  // Add "Total Theatre Amount" row
+  const totalAmount=orders.reduce((sum, order) => sum + order.total, 0);
+
+  worksheetData.push({}); 
   worksheetData.push({
     'Order ID': '',
     'Customer Name': '',

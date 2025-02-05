@@ -9,8 +9,6 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { FOOD_CATEGORIES } from '../../constants/categories';
 
 
-
-
 interface MenuModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -70,22 +68,6 @@ function MenuModal({ isOpen, onClose, editingItem, onSubmit }: MenuModalProps) {
   const removeCurrentImage = () => {
     setFormData({ ...formData, currentImageUrl: '', currentImageName: '', image: null });
   };
-
-  //anithaa
-  // const [inputValue, setInputValue] = useState("");
-  // const addData=async ()=>{
-  //   const docRef = collection(db, 'FOOD_CATEGORIES');
-  //   const docalldata = await getDocs(docRef);
-  //   const firstDoc = docalldata.docs[0];
-  //   const firstDocId = firstDoc.id;
-  //   const r1=doc(db,'FOOD_CATEGORIES',firstDocId)
-  //   const foodcategories = FOOD_CATEGORIES || [];
-  //   if (!foodcategories.includes(inputValue)) {
-  //       foodcategories.push(inputValue);
-  //       await updateDoc(r1, { foodcategories });
-  // }
-//}
-
   if (!isOpen) return null;
 
   return (
@@ -126,45 +108,6 @@ function MenuModal({ isOpen, onClose, editingItem, onSubmit }: MenuModalProps) {
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
             />
           </div>
-{/* new */}
-          {/* <div>
-  <label className="block text-sm font-medium text-gray-700">Category</label>
-  <select
-    required
-    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-600 focus:ring-purple-600"
-    value={formData.category}
-    onChange={(e) => {
-      const selectedCategory = e.target.value;
-      if (selectedCategory === "add-new") {
-        setFormData({ ...formData, category: "" });
-        setIsAddingNewCategory(true);
-      } else {
-        setFormData({ ...formData, category: selectedCategory });
-        setIsAddingNewCategory(false);
-      }
-    }}
-  >
-    {FOOD_CATEGORIES.map((category) => (
-      <option key={category} value={category}>
-        {category}
-      </option>
-    ))}
-    <option value="add-new">Add New Category</option>
-  </select>
-
-  {isAddingNewCategory && (
-    <div className="mt-2">
-      <label className="block text-sm font-medium text-gray-700">New Category</label>
-      <input
-        type="text"
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-600 focus:ring-purple-600"
-        value={formData.category}
-        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-        placeholder="Enter new category"
-      />
-    </div>
-  )}
-</div> */}
 <div>
   <label className="block text-sm font-medium text-gray-700">Category</label>
   {!isAddingNewCategory ? (

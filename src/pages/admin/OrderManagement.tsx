@@ -103,30 +103,6 @@ ${order.items
       Thank You for Choosing ${ThreaterName}!
 `;
 
-
-  //   const printContent = `
-  //   Customer Copy
-  //   G3 CINEMA
-  // ------------------
-  //   Order Details:
-  //   Customer: ${order.customerName}
-  //   Seat: ${order.seatNumber}
-  //   Screen: ${order.screen}
-  //   Phone: ${order.customerPhone}
-    
-  //   Items:
-  //   ${order.items.map(item => `${item.name} x${item.quantity} - ₹${item.price * item.quantity}`).join('\n')}
-    
-    
-    
-  //   Total: ₹${order.total.toFixed(2)}
-  // `;
-
-    // Subtotal: ₹${subtotal.toFixed(2)}
-    //   SGST (2.5%): ₹${sgst.toFixed(2)}
-    //   CGST (2.5%): ₹${cgst.toFixed(2)}
-    //   Handling Charges (4%): ₹${handlingCharges.toFixed(2)}
-    
     const printWindow = window.open('', '_blank');
     if (printWindow) {
       printWindow.document.write(`<pre>${printContent}</pre>`);
@@ -232,8 +208,6 @@ ${order.items
           );
         })}
       </div>
-  
-      {/* Empty Orders Fallback */}
       {orders.length === 0 && (
         <div className="text-center py-12">
           <p className="text-gray-500">No pending orders</p>
